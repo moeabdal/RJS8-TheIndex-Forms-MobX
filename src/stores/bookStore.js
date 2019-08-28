@@ -12,9 +12,21 @@ class BookStore {
 
   loading = true;
 
+  addBook = async (newBook, author) => {
+    newBook.authors = [author.id];
+    try {
+      const res = await instance.post("/api/books/", newBook);
+      const book = res.data;
+      this.books.push(book);
+      author.books.push(book.id);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   fetchBooks = async () => {
     try {
-      const res = await instance.get(
+      const res = await axios.get(
         "https://the-index-api.herokuapp.com/api/books/"
       );
       const books = res.data;
